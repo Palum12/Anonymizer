@@ -1,30 +1,40 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
- * See LICENSE in the project root for license information.
- */
-
 /* global document, Office, Word */
+import {DetectorsContainer} from "../detectors/DetectorsContainer";
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
-    document.getElementById("run").onclick = run;
+    document.getElementById("anonymize").onclick = anonymize;
+    // document.getElementById("deanonymize").onclick = run;
   }
 });
 
-export async function run() {
+export async function anonymize() {
   return Word.run(async context => {
-    /**
-     * Insert your Word code here
-     */
+    const detectorsContainer = new DetectorsContainer();
 
-    // insert a paragraph at the end of the document.
-    const paragraph = context.document.body.insertParagraph("Hello World", Word.InsertLocation.end);
+    const range = context.document.body.getRange();
+    context.load(range, 'text');
+    await context.sync();
 
-    // change the paragraph color to blue.
-    paragraph.font.color = "blue";
+    const words = range.text.split(/([\s,.])/).filter(e => e.trim());
+    const wordsToAnonymize = detectorsContainer.FindPersonalData(words);
+
+    const searchResults = [];
+    wordsToAnonymize.forEach(text => {
+      let searchResult = range.search(text);
+      searchResults.push([searchResult, text]);
+      context.load(searchResult, 'text');
+    });
+    await context.sync();
+
+    searchResults.forEach(result => {
+      result[0].items.forEach(element => {
+          element.insertText('*'.repeat(result[1].length), Word.InsertLocation.replace); 
+      });
+  });
 
     await context.sync();
-  });
+  })
 }
