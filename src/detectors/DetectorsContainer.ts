@@ -1,6 +1,7 @@
 import {Detector} from "./Detector";
 import {PeselsDetector} from "./PeselsDetector";
 import {EmailsDetector} from "./EmailsDetector";
+import {NamesDetector} from './NamesDetector';
 
 export class DetectorsContainer {
    private detectors: Detector[];
@@ -9,6 +10,7 @@ export class DetectorsContainer {
        this.detectors = [];
        this.detectors.push(new EmailsDetector());
        this.detectors.push(new PeselsDetector());
+       this.detectors.push(new NamesDetector());
    }
 
    public FindPersonalData(words: string[]): string[] {
