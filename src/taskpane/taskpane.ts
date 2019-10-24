@@ -1,5 +1,5 @@
 /* global document, Office, Word */
-import {DetectorsContainer} from "../detectors/DetectorsContainer";
+import {DetectorComposite} from "../detectors/DetectorComposite";
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
@@ -12,14 +12,14 @@ Office.onReady(info => {
 
 export async function anonymize() {
   return Word.run(async context => {
-    const detectorsContainer = new DetectorsContainer();
+    const detectorsContainer = new DetectorComposite();
 
     const range = context.document.body.getRange();
     context.load(range, 'text');
     await context.sync();
 
     const words = range.text.split(/([\s,.])/).filter(e => e.trim());
-    const wordsToAnonymize = detectorsContainer.FindPersonalData(words);
+    const wordsToAnonymize = detectorsContainer.detectMatchingWords(words);
 
     const searchResults = [];
     wordsToAnonymize.forEach(text => {
