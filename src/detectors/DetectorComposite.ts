@@ -1,3 +1,4 @@
+import { PhoneNumbersDetector } from './PhoneNumbersDetector';
 import {Detector} from "./Detector";
 import {PeselsDetector} from "./PeselsDetector";
 import {EmailsDetector} from "./EmailsDetector";
@@ -11,6 +12,7 @@ export class DetectorComposite implements Detector {
        this.detectors.push(new EmailsDetector());
        this.detectors.push(new PeselsDetector());
        this.detectors.push(new NamesDetector());
+       this.detectors.push(new PhoneNumbersDetector());
    }
 
    detectMatchingWords(words: string[]): string[] {

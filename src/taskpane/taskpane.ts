@@ -18,7 +18,10 @@ export async function anonymize() {
     context.load(range, 'text');
     await context.sync();
 
-    const words = range.text.split(/([\s,.])/).filter(e => e.trim());
+    const words = range.text.split(/(\.(?=\s|$)|\s)/g).filter(word => {
+      const trimmed = word.trim()
+      return trimmed != '' && trimmed != '.';
+    });
     const wordsToAnonymize = detectorsContainer.detectMatchingWords(words);
 
     const searchResults = [];
@@ -31,7 +34,8 @@ export async function anonymize() {
 
     searchResults.forEach(result => {
       result[0].items.forEach(element => {
-          element.insertText('*'.repeat(result[1].length), Word.InsertLocation.replace); 
+          element.insertText('*'.repeat(result[1].length), Word.InsertLocation.replace);
+          element.hyperlink = null; // this can be done better and not everytime
       });
   });
 
