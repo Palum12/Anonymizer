@@ -1,8 +1,9 @@
-import { PhoneNumbersDetector } from './PhoneNumbersDetector';
 import {Detector} from "./Detector";
 import {PeselsDetector} from "./PeselsDetector";
 import {EmailsDetector} from "./EmailsDetector";
 import {NamesDetector} from './NamesDetector';
+import {PhoneNumbersDetector} from './PhoneNumbersDetector';
+
 
 export class DetectorComposite implements Detector {
     private detectors: Detector[];
