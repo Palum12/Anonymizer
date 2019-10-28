@@ -1,19 +1,10 @@
 import {Detector} from "./Detector";
-import {PeselsDetector} from "./PeselsDetector";
-import {EmailsDetector} from "./EmailsDetector";
-import {NamesDetector} from './NamesDetector';
-import {PhoneNumbersDetector} from './PhoneNumbersDetector';
-
 
 export class DetectorComposite implements Detector {
     private detectors: Detector[];
    
-   constructor() {
-       this.detectors = [];
-       this.detectors.push(new EmailsDetector());
-       this.detectors.push(new PeselsDetector());
-       this.detectors.push(new NamesDetector());
-       this.detectors.push(new PhoneNumbersDetector());
+   constructor(detectors: Detector[]) {
+        this.detectors = detectors;
    }
 
    detectMatchingWords(words: string[]): string[] {

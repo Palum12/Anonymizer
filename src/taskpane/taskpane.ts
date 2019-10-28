@@ -1,3 +1,8 @@
+import { PhoneNumbersDetector } from './../detectors/PhoneNumbersDetector';
+import { PeselsDetector } from './../detectors/PeselsDetector';
+import { EmailsDetector } from './../detectors/EmailsDetector';
+import { Detector } from './../detectors/Detector';
+import { NamesDetector } from './../detectors/NamesDetector';
 /* global document, Office, Word */
 import {DetectorComposite} from "../detectors/DetectorComposite";
 
@@ -12,7 +17,8 @@ Office.onReady(info => {
 
 export async function anonymize() {
   return Word.run(async context => {
-    const detectorsContainer = new DetectorComposite();
+    const detectors = getDetectors();
+    const detectorsContainer = new DetectorComposite(detectors);
 
     const range = context.document.body.getRange();
     context.load(range, 'text');
@@ -41,4 +47,23 @@ export async function anonymize() {
 
     await context.sync();
   })
+}
+
+function getDetectors(): Detector[] {
+  const result = [];
+
+  if((<HTMLInputElement>document.getElementById("names")).value) {
+    result.push(new NamesDetector());
+  }
+  if((<HTMLInputElement>document.getElementById("phones")).value) {
+    result.push(new PhoneNumbersDetector());
+  }
+  if((<HTMLInputElement>document.getElementById("pesels")).value) {
+    result.push(new PeselsDetector());
+  }
+  if((<HTMLInputElement>document.getElementById("emails")).value) {
+    result.push(new EmailsDetector());
+  }
+
+  return result;
 }
