@@ -1,3 +1,4 @@
+import { LicensePlatesDetector } from './../detectors/LicensePlatesDetector';
 import { PhoneNumbersDetector } from './../detectors/PhoneNumbersDetector';
 import { PeselsDetector } from './../detectors/PeselsDetector';
 import { EmailsDetector } from './../detectors/EmailsDetector';
@@ -63,6 +64,9 @@ function getDetectors(): Detector[] {
   }
   if((<HTMLInputElement>document.getElementById("emails")).value) {
     result.push(new EmailsDetector());
+  }
+  if((<HTMLInputElement>document.getElementById("license-plates")).value) {
+    result.push(new LicensePlatesDetector());
   }
 
   return result;
