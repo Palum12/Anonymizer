@@ -52,16 +52,16 @@ export async function anonymize() {
 function getDetectors(): Detector[] {
   const result = [];
 
-  if((<HTMLInputElement>document.getElementById("names")).value) {
+  if((<HTMLInputElement>document.getElementById("names")).checked) {
     result.push(new NamesDetector());
   }
-  if((<HTMLInputElement>document.getElementById("phones")).value) {
+  if((<HTMLInputElement>document.getElementById("phones")).checked) {
     result.push(new PhoneNumbersDetector());
   }
-  if((<HTMLInputElement>document.getElementById("pesels")).value) {
+  if((<HTMLInputElement>document.getElementById("pesels")).checked) {
     result.push(new PeselsDetector());
   }
-  if((<HTMLInputElement>document.getElementById("emails")).value) {
+  if((<HTMLInputElement>document.getElementById("emails")).checked) {
     result.push(new EmailsDetector());
   }
 

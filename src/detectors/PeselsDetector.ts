@@ -2,6 +2,8 @@ import {Detector} from "./Detector";
 
 export class PeselsDetector implements Detector {
 
+    private TOLERATED_NUMBER_OF_ERRORS = 1;
+
     detectMatchingWords(words: string[]): string[] {
         const pesels = [];
 
@@ -9,7 +11,7 @@ export class PeselsDetector implements Detector {
             let result = this.validatePesel(word);
             if(result[0]) {
                 pesels.push(word);
-            } else if(result[1].length === 1) {
+            } else if(result[1].length === this.TOLERATED_NUMBER_OF_ERRORS) {
                 const canPeselBeFixed = this.canPeselBeFixed(word, result[1]);
                 if(canPeselBeFixed) {
                     pesels.push(word);
