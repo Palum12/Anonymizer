@@ -5,15 +5,18 @@ export class LicensePlatesDetector implements Detector {
         const foundLicensePlates = [];
         for(let i = 0; i < words.length; i++) {
             let currentWord = words[i];    
-            if(this.registersDatabase.indexOf(currentWord.substr(0, 3)) > -1) {
-                let possiblePlate = currentWord;
-                if ((currentWord.length === 2 || currentWord.length === 3) && words[i + 1]) {
+            
+            let possiblePlate = currentWord;
+            if ((currentWord.length === 2 || currentWord.length === 3) && words[i + 1]) {
+                const wordLength = currentWord.length
+                if (this.registersDatabase.indexOf(currentWord.substr(0, wordLength)) > -1) {
                     possiblePlate = currentWord + ' ' + words[i + 1];
-                } 
-                if(this.registerRegex.test(possiblePlate)) {
-                    foundLicensePlates.push(possiblePlate);
                 }
             }
+            if(this.registerRegex.test(possiblePlate)) {
+                foundLicensePlates.push(possiblePlate);
+            }
+           
         }
         return foundLicensePlates;
     }
