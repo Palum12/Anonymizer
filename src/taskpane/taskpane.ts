@@ -65,9 +65,9 @@ function getDetectors(): Detector[] {
   if((<HTMLInputElement>document.getElementById("emails")).checked) {
     result.push(new EmailsDetector());
   }
-    if ((<HTMLInputElement>document.getElementById("dates")).checked) {
-        result.push(new DateDetector());
-    }
+if ((<HTMLInputElement>document.getElementById("dates")).checked) {
+    result.push(new DateDetector());
+}
 
   return result;
 }
