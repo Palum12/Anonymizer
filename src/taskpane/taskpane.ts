@@ -6,6 +6,7 @@ import { Detector } from './../detectors/Detector';
 import { NamesDetector } from './../detectors/NamesDetector';
 /* global document, Office, Word */
 import {DetectorComposite} from "../detectors/DetectorComposite";
+import { DateDetector } from '../detectors/DateDetector';
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
@@ -65,6 +66,9 @@ function getDetectors(): Detector[] {
   if((<HTMLInputElement>document.getElementById("emails")).checked) {
     result.push(new EmailsDetector());
   }
+if ((<HTMLInputElement>document.getElementById("dates")).checked) {
+    result.push(new DateDetector());
+}
   if((<HTMLInputElement>document.getElementById("license-plates")).value) {
     result.push(new LicensePlatesDetector());
   }
