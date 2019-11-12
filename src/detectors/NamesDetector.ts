@@ -1,5 +1,5 @@
 import {Detector} from "./Detector";
-import {names, surnames} from "./NameAndSurnameBase";
+import {names, surnames} from "../storages/NameAndSurnameBase";
 
 export class NamesDetector implements Detector {
     detectMatchingWords(words: string[]): string[] {

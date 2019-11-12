@@ -1,3 +1,4 @@
+import { ExampleDataGenerator } from './../generator/exampleDataGenerator';
 import { LicensePlatesDetector } from './../detectors/LicensePlatesDetector';
 import { PhoneNumbersDetector } from './../detectors/PhoneNumbersDetector';
 import { PeselsDetector } from './../detectors/PeselsDetector';
@@ -13,6 +14,7 @@ Office.onReady(info => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("anonymize").onclick = anonymize;
+    document.getElementById("generate").onclick = generateExampleText;
     // document.getElementById("deanonymize").onclick = run;
   }
 });
@@ -47,6 +49,20 @@ export async function anonymize() {
       });
   });
 
+    await context.sync();
+  })
+}
+
+export async function generateExampleText() {
+  return Word.run(async context => {
+    const generator = new ExampleDataGenerator();
+    const text = generator.generateText(10);
+    const range = context.document.body.getRange();
+    context.load(range, 'text');
+    await context.sync();
+    range.clear();
+    await context.sync();
+    range.insertText(text, Word.InsertLocation.start);
     await context.sync();
   })
 }
