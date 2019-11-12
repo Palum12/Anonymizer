@@ -66,10 +66,10 @@ function getDetectors(): Detector[] {
   if((<HTMLInputElement>document.getElementById("emails")).checked) {
     result.push(new EmailsDetector());
   }
-if ((<HTMLInputElement>document.getElementById("dates")).checked) {
+  if((<HTMLInputElement>document.getElementById("dates")).checked) {
     result.push(new DateDetector());
-}
-  if((<HTMLInputElement>document.getElementById("license-plates")).value) {
+  }
+  if((<HTMLInputElement>document.getElementById("license-plates")).checked) {
     result.push(new LicensePlatesDetector());
   }
 
