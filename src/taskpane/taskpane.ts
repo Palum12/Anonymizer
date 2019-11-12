@@ -56,7 +56,7 @@ export async function anonymize() {
 export async function generateExampleText() {
   return Word.run(async context => {
     const generator = new ExampleDataGenerator();
-    const text = generator.generateText(10);
+    const text = generator.generateText();
     const range = context.document.body.getRange();
     context.load(range, 'text');
     await context.sync();
