@@ -28,7 +28,7 @@ export async function anonymize() {
     context.load(range, 'text');
     await context.sync();
 
-    const words = range.text.split(/(\.(?=\s|$)|\s)|(,)/g).filter(word => {
+    const words = range.text.split(/(\.(?=\s|$)|\s)/g).filter(word => {
       const trimmed = word.trim()
       return trimmed != '' && trimmed != '.';
     });
