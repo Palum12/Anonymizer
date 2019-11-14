@@ -92,10 +92,10 @@ function getDetectors(): Detector[] {
   }
   if((<HTMLInputElement>document.getElementById("license-plates")).checked) {
     result.push(new LicensePlatesDetector());
-    }
-    if ((<HTMLInputElement>document.getElementById("diseases")).checked) {
-        result.push(new DiseaseDetector());
-    }
+  }
+  if((<HTMLInputElement>document.getElementById("diseases")).checked) {
+    result.push(new DiseaseDetector());
+  }
 
   return result;
 }
