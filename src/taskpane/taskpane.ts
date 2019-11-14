@@ -28,9 +28,13 @@ export async function anonymize() {
     context.load(range, 'text');
     await context.sync();
 
-    const words = range.text.split(/(\.(?=\s|$)|\s)/g).filter(word => {
-      const trimmed = word.trim()
-      return trimmed != '' && trimmed != '.';
+      const words = range.text.split(/((\.(?=\s|$)|\s)|(,))/g).filter(word => {
+          if (typeof word === 'string') {
+              const trimmed = word.trim()
+              return trimmed != '' && trimmed != '.' && trimmed != ',';
+          } else {
+              return false
+          }
     });
     const wordsToAnonymize = detectorsContainer.detectMatchingWords(words);
 
