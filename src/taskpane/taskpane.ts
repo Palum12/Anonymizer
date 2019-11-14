@@ -5,6 +5,7 @@ import { PeselsDetector } from './../detectors/PeselsDetector';
 import { EmailsDetector } from './../detectors/EmailsDetector';
 import { Detector } from './../detectors/Detector';
 import { NamesDetector } from './../detectors/NamesDetector';
+import { DiseaseDetector } from './../detectors/DiseaseDetector';
 /* global document, Office, Word */
 import {DetectorComposite} from "../detectors/DetectorComposite";
 import { DateDetector } from '../detectors/DateDetector';
@@ -91,7 +92,10 @@ function getDetectors(): Detector[] {
   }
   if((<HTMLInputElement>document.getElementById("license-plates")).checked) {
     result.push(new LicensePlatesDetector());
-  }
+    }
+    if ((<HTMLInputElement>document.getElementById("diseases")).checked) {
+        result.push(new DiseaseDetector());
+    }
 
   return result;
 }
