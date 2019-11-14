@@ -1,10 +1,10 @@
-import {names, surnames} from "../storages/NameAndSurnameBase";
+import {names, surnames} from "../storages/NamesAndSurnamesBase";
 import {mails} from "../storages/EmailsBase";
-import {pesels} from "../storages/PeselBase";
-import {phoneNumbers} from "../storages/PhoneNumberBase";
+import {pesels} from "../storages/PeselsBase";
+import {phoneNumbers} from "../storages/PhoneNumbersBase";
 import {licensePlates} from "../storages/LicensePlatesBase";
-import {diseases} from "../storages/DiseaseBase";
-import {streets} from "../storages/StreetBase";
+import {diseases} from "../storages/DiseasesBase";
+import {streets} from "../storages/StreetsBase";
 
 export class ExampleDataGenerator {
     public generateText(): string {

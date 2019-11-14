@@ -1,5 +1,5 @@
 import {Detector} from "./Detector";
-import {diseases} from "../storages/DiseaseBase";
+import {diseases} from "../storages/DiseasesBase";
 
 export class DiseaseDetector implements Detector {
     detectMatchingWords(words: string[]): string[] {
