@@ -1,3 +1,5 @@
+import { LocalityDetector } from './../detectors/LocalityDetector';
+import { PostalCodeDetector } from './../detectors/PostalCodeDetector';
 import { ExampleDataGenerator } from './../generator/exampleDataGenerator';
 import { LicensePlatesDetector } from './../detectors/LicensePlatesDetector';
 import { PhoneNumbersDetector } from './../detectors/PhoneNumbersDetector';
@@ -96,6 +98,11 @@ function getDetectors(): Detector[] {
   if((<HTMLInputElement>document.getElementById("diseases")).checked) {
     result.push(new DiseaseDetector());
   }
-
+  if((<HTMLInputElement>document.getElementById("postal-codes")).checked) {
+    result.push(new PostalCodeDetector());
+  }
+  if((<HTMLInputElement>document.getElementById("localities")).checked) {
+    result.push(new LocalityDetector());
+  }
   return result;
 }

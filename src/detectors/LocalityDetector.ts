@@ -1,10 +1,10 @@
-import {Detector} from "./Detector";
-let diseases = require('../storages/DiseasesBase.json');
+import { Detector } from './Detector';
+let localities = require('../storages/LocalitiesBase.json');
 
-export class DiseaseDetector implements Detector {
+export class LocalityDetector implements Detector {
     detectMatchingWords(words: string[]): string[] {
         return words.filter(word => 
-            this.stringOptimizedBinarySearch(word, diseases)); 
+            this.stringOptimizedBinarySearch(word, localities)); 
     }
 
     private stringOptimizedBinarySearch(element: string, array: string[]): boolean {
@@ -13,7 +13,7 @@ export class DiseaseDetector implements Detector {
           
         while (start<=end){ 
             let mid = Math.floor((start + end)/2); 
-            let compareResult = array[mid].localeCompare(element, 'pl', {'sensitivity': 'variant'});
+            let compareResult = array[mid].localeCompare(element, 'pl', {'sensitivity': 'case'});
             if (compareResult === 0) {
                 return true; 
             }

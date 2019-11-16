@@ -1,5 +1,6 @@
 import {Detector} from "./Detector";
-import {names, surnames} from "../storages/NameAndSurnameBase";
+let names = require('../storages/NamesBase.json');
+let surnames = require('../storages/SurnamesBase.json');
 
 export class NamesDetector implements Detector {
     detectMatchingWords(words: string[]): string[] {
