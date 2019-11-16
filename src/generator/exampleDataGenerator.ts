@@ -5,6 +5,9 @@ import {phoneNumbers} from "../storages/PhoneNumbersBase";
 import {licensePlates} from "../storages/LicensePlatesBase";
 import {diseases} from "../storages/DiseasesBase";
 import {streets} from "../storages/StreetsBase";
+import {localities} from "../storages/LocalitiesBase";
+import {postalCodes} from "../storages/PostalCodesBase";
+
 
 export class ExampleDataGenerator {
     public generateText(): string {
@@ -15,7 +18,7 @@ export class ExampleDataGenerator {
         const dateString = dt.getDate() + '-' + (dt.getMonth() + 1) + '-' +  (dt.getFullYear() - 20);
         texts.push("Pesel: " + this.getRandomElementFromArray(pesels));
         texts.push("Data urodzenia: " + dateString);
-        texts.push(`Adres: Wrocław ul.${this.getRandomElementFromArray(streets)} 32/5 50-553`);
+        texts.push(`Adres: ${this.getRandomElementFromArray(localities)} ul.${this.getRandomElementFromArray(streets)} 32/5 ${this.getRandomElementFromArray(postalCodes)}`);
         texts.push("Adres e-mail: " + this.getRandomElementFromArray(mails));
         texts.push("Numer telefonu: " + this.getRandomElementFromArray(phoneNumbers));
         texts.push("\n Sąd rozważył co następuje: \n");

@@ -1,7 +1,29 @@
 import { Detector } from './Detector';
+import {localities} from '../storages/LocalitiesBase'
 
 export class LocalityDetector implements Detector {
     detectMatchingWords(words: string[]): string[] {
-        throw new Error("Method not implemented.");
+        return words.filter(word => 
+            this.stringOptimizedBinarySearch(word, localities)); 
+    }
+
+    private stringOptimizedBinarySearch(element: string, array: string[]): boolean {
+        let start = 0;
+        let end = array.length-1; 
+          
+        while (start<=end){ 
+            let mid = Math.floor((start + end)/2); 
+            let compareResult = array[mid].localeCompare(element, 'pl', {'sensitivity': 'base'});
+            if (compareResult === 0) {
+                return true; 
+            }
+            else if (compareResult < 0) {
+                start = mid + 1; 
+            }
+            else {
+                end = mid - 1; 
+            }
+        } 
+        return false; 
     }
 }
