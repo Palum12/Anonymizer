@@ -6,6 +6,6 @@ export class PostalCodeDetector implements Detector {
     }
 
     private validatePostalCode(word: string): boolean {
-        return word.indexOf('-') == 2;
+        return word.length === 6 && word.indexOf('-') == 2;
     }
 }

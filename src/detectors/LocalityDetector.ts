@@ -1,5 +1,5 @@
 import { Detector } from './Detector';
-import {localities} from '../storages/LocalitiesBase'
+let localities = require('../storages/LocalitiesBase.json');
 
 export class LocalityDetector implements Detector {
     detectMatchingWords(words: string[]): string[] {
@@ -13,7 +13,7 @@ export class LocalityDetector implements Detector {
           
         while (start<=end){ 
             let mid = Math.floor((start + end)/2); 
-            let compareResult = array[mid].localeCompare(element, 'pl', {'sensitivity': 'base'});
+            let compareResult = array[mid].localeCompare(element, 'pl', {'sensitivity': 'case'});
             if (compareResult === 0) {
                 return true; 
             }

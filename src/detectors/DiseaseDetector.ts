@@ -1,5 +1,5 @@
 import {Detector} from "./Detector";
-import {diseases} from "../storages/DiseasesBase";
+let diseases = require('../storages/DiseasesBase.json');
 
 export class DiseaseDetector implements Detector {
     detectMatchingWords(words: string[]): string[] {
@@ -8,15 +8,21 @@ export class DiseaseDetector implements Detector {
     }
 
     private stringOptimizedBinarySearch(element: string, array: string[]): boolean {
-        let end = array.length - 1; 
-        var index = 0
+        let start = 0;
+        let end = array.length-1; 
           
-        while (index<=end){ 
-            let compareResult = array[index].localeCompare(element);
+        while (start<=end){ 
+            let mid = Math.floor((start + end)/2); 
+            let compareResult = array[mid].localeCompare(element, 'pl', {'sensitivity': 'variant'});
             if (compareResult === 0) {
                 return true; 
             }
-            index++;
+            else if (compareResult < 0) {
+                start = mid + 1; 
+            }
+            else {
+                end = mid - 1; 
+            }
         } 
         return false; 
     }
