@@ -1,5 +1,5 @@
 import { Anonymizer } from "./Anonymizer";
-import { AnonymizerDto } from "src/dtos/AnonymizerDto";
+import { AnonymizerDto } from "../dtos/AnonymizerDTO";
 
 export class AsteriskAnonymizer implements Anonymizer {
     anonymizeTexts(texts: string[]): AnonymizerDto[] {

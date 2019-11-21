@@ -89,3 +89,7 @@ b {
     flex-direction: column;
     justify-content: flex-start;
 }
+
+.anonymizers {
+    padding: 10px 0;
+}
