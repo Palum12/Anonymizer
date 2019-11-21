@@ -11,14 +11,16 @@ export class StreetsDetector implements Detector {
         let length = words.length
         for (let i = 0; i < words.length; i++) {
             if (triggers.indexOf(words[i]) !== -1) {
-                console.log(words[i])
                 let isFinished = false
                 let x = 1
                 while (x < length && !isFinished) {
                     if (i + x < length) {
                         let word = words[i + x]
-                        if (this.isCaption(word) || this.startsWithNumber(word)) {
+                        if (this.isCaption(word)) { 
                             streets.push(words[i + x])
+                        } else if (this.startsWithNumber(word)) {
+                            streets.push(words[i + x])
+                            isFinished = true
                         } else {
                             isFinished = true
                         }
@@ -32,7 +34,7 @@ export class StreetsDetector implements Detector {
     }
 
     private isCaption(text: string): boolean {
-         return this.capitalizeFirstLetter(text) == text
+         return this.capitalizeFirstLetter(text) == text && !this.startsWithNumber(text)
     }
 
     private startsWithNumber(text: string) {
