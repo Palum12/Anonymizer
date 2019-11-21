@@ -1,3 +1,6 @@
+import { AnonymizerDto } from 'src/dtos/AnonymizerDto';
+import { AsteriskAnonymizer } from './../anonymizers/AsteriskAnonymizer';
+import { RegexAnonymizer } from './../anonymizers/RegexAnonymizer';
 import { LocalityDetector } from './../detectors/LocalityDetector';
 import { PostalCodeDetector } from './../detectors/PostalCodeDetector';
 import { ExampleDataGenerator } from './../generator/exampleDataGenerator';
@@ -12,6 +15,9 @@ import { DiseaseDetector } from './../detectors/DiseaseDetector';
 import {DetectorComposite} from "../detectors/DetectorComposite";
 import { DateDetector } from '../detectors/DateDetector';
 import { StreetsDetector } from '../detectors/StreetsDetector';
+import { Anonymizer } from 'src/anonymizers/Anonymizer';
+
+const anonymizersDictionary: {[id: string] : Anonymizer} = {};
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
@@ -20,12 +26,21 @@ Office.onReady(info => {
     document.getElementById("anonymize").onclick = anonymize;
     document.getElementById("generate").onclick = generateExampleText;
     // document.getElementById("deanonymize").onclick = run;
+
+    prepareSelect();
   }
 });
+
 
 export async function anonymize() {
   return Word.run(async context => {
     const detectors = getDetectors();
+    const anonymizer = getAnonymizer();
+
+    if(!anonymizer || !detectors) {
+      return;
+    }
+
     const detectorsContainer = new DetectorComposite(detectors);
 
     const range = context.document.body.getRange();
@@ -41,21 +56,23 @@ export async function anonymize() {
           }
     });
     const wordsToAnonymize = detectorsContainer.detectMatchingWords(words);
+    const anonymizedWords = anonymizer.anonymizeTexts(wordsToAnonymize);
 
     const searchResults = [];
-    wordsToAnonymize.forEach(text => {
-      let searchResult = range.search(text);
-      searchResults.push([searchResult, text]);
+    anonymizedWords.forEach(pair => {
+      let searchResult = range.search(pair.originalText);
+      searchResults.push([searchResult, pair]);
       context.load(searchResult, 'text');
     });
     await context.sync();
 
-    searchResults.forEach(result => {
-      result[0].items.forEach(element => {
-          element.insertText('*'.repeat(result[1].length), Word.InsertLocation.replace);
-          element.hyperlink = null; // this can be done better and not everytime
+    searchResults.forEach((result: [Word.RangeCollection, AnonymizerDto]) => {
+      result[0].items.forEach((element: Word.Range) => {
+          element.insertText(result[1].anonymizedText, Word.InsertLocation.replace);
+          element.hyperlink = null;
+          element.font.color = '#FF0000';
       });
-  });
+    });
 
     await context.sync();
   })
@@ -73,6 +90,27 @@ export async function generateExampleText() {
     range.insertText(text, Word.InsertLocation.start);
     await context.sync();
   })
+}
+
+function prepareSelect() {
+  const anonymizerSelect = document.getElementById("anonymizer");
+
+  const asterixAnonymizerOption = document.createElement("option");
+  const asterixOptionValue = "asteriskAnonymizer";
+  asterixAnonymizerOption.id = "asteriskAnonymizer";
+  asterixAnonymizerOption.value = asterixOptionValue;
+  asterixAnonymizerOption.text = "Gwiazdkowanie";
+  anonymizersDictionary[asterixOptionValue] = new AsteriskAnonymizer()
+  anonymizerSelect.appendChild(asterixAnonymizerOption);
+
+  const regexAnonymizerOption = document.createElement("option");
+  const regexOptionValue = "regexAnonymizer";
+  regexAnonymizerOption.id = "regexAnonymizer";
+  regexAnonymizerOption.value = regexOptionValue;
+  regexAnonymizerOption.text = "Wyrażenie regularne";
+  anonymizersDictionary[regexOptionValue] = new RegexAnonymizer()
+  anonymizerSelect.appendChild(regexAnonymizerOption);
+
 }
 
 function getDetectors(): Detector[] {
@@ -105,8 +143,15 @@ function getDetectors(): Detector[] {
   if((<HTMLInputElement>document.getElementById("localities")).checked) {
     result.push(new LocalityDetector());
   }
-    if ((<HTMLInputElement>document.getElementById("streets")).checked) {
-        result.push(new StreetsDetector());
-    }
+  if ((<HTMLInputElement>document.getElementById("streets")).checked) {
+      result.push(new StreetsDetector());
+  }
   return result;
+}
+
+function getAnonymizer(): Anonymizer {
+  const element = <HTMLSelectElement>document.getElementById("anonymizer");
+  const elementValue = element.value;
+  const anonymizer = anonymizersDictionary[elementValue]
+  return anonymizer;
 }
