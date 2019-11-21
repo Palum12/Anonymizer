@@ -11,6 +11,7 @@ import { DiseaseDetector } from './../detectors/DiseaseDetector';
 /* global document, Office, Word */
 import {DetectorComposite} from "../detectors/DetectorComposite";
 import { DateDetector } from '../detectors/DateDetector';
+import { StreetsDetector } from '../detectors/StreetsDetector';
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
@@ -104,5 +105,8 @@ function getDetectors(): Detector[] {
   if((<HTMLInputElement>document.getElementById("localities")).checked) {
     result.push(new LocalityDetector());
   }
+    if ((<HTMLInputElement>document.getElementById("streets")).checked) {
+        result.push(new StreetsDetector());
+    }
   return result;
 }
