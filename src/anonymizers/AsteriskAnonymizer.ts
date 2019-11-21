@@ -2,7 +2,7 @@ import { Anonymizer } from "./Anonymizer";
 import { AnonymizerDto } from "src/dtos/AnonymizerDto";
 
 export class AsteriskAnonymizer implements Anonymizer {
-    AnonymizeTexts(texts: string[]): AnonymizerDto[] {
+    anonymizeTexts(texts: string[]): AnonymizerDto[] {
         const result = [];
         texts.forEach(text => {
             const anonymizedText = '*'.repeat(text.length);

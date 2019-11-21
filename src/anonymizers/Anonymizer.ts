@@ -1,4 +1,4 @@
 import { AnonymizerDto } from './../dtos/AnonymizerDto';
 export interface Anonymizer {
-    AnonymizeTexts(texts: string[]): AnonymizerDto[];
+    anonymizeTexts(texts: string[]): AnonymizerDto[];
 }
