@@ -56,7 +56,7 @@ export async function anonymize() {
           }
     });
     const wordsToAnonymize = detectorsContainer.detectMatchingWords(words);
-    const anonymizedWords = anonymizer.anonymizeTexts(wordsToAnonymize);
+    let anonymizedWords = anonymizer.anonymizeTexts(wordsToAnonymize);
 
     const searchResults = [];
     anonymizedWords.forEach(pair => {

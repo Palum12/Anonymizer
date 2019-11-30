@@ -68,12 +68,23 @@
             </select>
         </div>
 
+        <div class="anonymizer-params">
+            <div>
+                <label for="regexNumberParam" style="word-wrap: break-word;">
+                    Rozmiar przedziału znaków regex                
+                </label>
+            </div>
+            <div>
+                <input type="number" id="regexNumberParam" value="1">
+            </div>
+        </div>
+
         <div role="button" id="anonymize" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
             <span class="ms-Button-label">Anonimizuj</span>
         </div>
-        <div role="button" id="deanonymize" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+        <!-- <div role="button" id="deanonymize" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
             <span class="ms-Button-label">Deanonimizuj</span>
-        </div>
+        </div> -->
         <div role="button" id="generate" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
             <span class="ms-Button-label">Generuj sztuczne dane</span>
         </div>
