@@ -1,8 +1,11 @@
-import {Detector} from "./Detector";
+import { Detector } from "./Detector";
+import { AnonymizerDto } from "../../src/models/AnonymizerDto";
+import { PhraseType } from "../../src/models/PhraseType";
 
 export class EmailsDetector implements Detector {
-    detectMatchingWords(words: string[]): string[] {
-        return words.filter(word => this.validateEmail(word)); 
+    detectMatchingWords(words: string[]): AnonymizerDto[] {
+        return words.filter(word => this.validateEmail(word))
+        .map(word => Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.email})); 
     }
 
     private validateEmail(word: string): boolean {

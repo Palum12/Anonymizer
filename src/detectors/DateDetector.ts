@@ -1,8 +1,12 @@
-import {Detector} from "./Detector";
+import { PhraseType } from './../models/PhraseType';
+import { Detector } from "./Detector";
+import { AnonymizerDto } from './../models/AnonymizerDto';
 
 export class DateDetector implements Detector {
-    detectMatchingWords(words: string[]): string[] {
-        return words.filter(word => this.validateSimpleDate(word));
+    detectMatchingWords(words: string[]): AnonymizerDto[] {
+        return words
+        .filter(word => this.validateSimpleDate(word))
+        .map(word => Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.date}));
     }
 
     private validateSimpleDate(word: string): boolean {

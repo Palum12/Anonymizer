@@ -1,4 +1,4 @@
-import { AnonymizerDto } from 'src/dtos/AnonymizerDto';
+import { AnonymizerDto } from '../../src/models/AnonymizerDto';
 import { AsteriskAnonymizer } from './../anonymizers/AsteriskAnonymizer';
 import { RegexAnonymizer } from './../anonymizers/RegexAnonymizer';
 import { LocalityDetector } from './../detectors/LocalityDetector';
@@ -15,7 +15,7 @@ import { DiseaseDetector } from './../detectors/DiseaseDetector';
 import {DetectorComposite} from "../detectors/DetectorComposite";
 import { DateDetector } from '../detectors/DateDetector';
 import { StreetsDetector } from '../detectors/StreetsDetector';
-import { Anonymizer } from 'src/anonymizers/Anonymizer';
+import { Anonymizer } from '../../src/anonymizers/Anonymizer';
 
 const anonymizersDictionary: {[id: string] : Anonymizer} = {};
 
@@ -56,10 +56,10 @@ export async function anonymize() {
           }
     });
     const wordsToAnonymize = detectorsContainer.detectMatchingWords(words);
-    let anonymizedWords = anonymizer.anonymizeTexts(wordsToAnonymize);
+    anonymizer.anonymizeTexts(wordsToAnonymize);
 
     const searchResults = [];
-    anonymizedWords.forEach(pair => {
+    wordsToAnonymize.forEach(pair => {
       let searchResult = range.search(pair.originalText);
       searchResults.push([searchResult, pair]);
       context.load(searchResult, 'text');

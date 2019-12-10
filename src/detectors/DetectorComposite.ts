@@ -1,3 +1,4 @@
+import { AnonymizerDto } from '../../src/models/AnonymizerDto';
 import {Detector} from "./Detector";
 
 export class DetectorComposite implements Detector {
@@ -7,7 +8,7 @@ export class DetectorComposite implements Detector {
         this.detectors = detectors;
    }
 
-   detectMatchingWords(words: string[]): string[] {
+   detectMatchingWords(words: string[]): AnonymizerDto[] {
         const importantWords = [];   
         this.detectors.forEach(detector => {
                const detectorResult = detector.detectMatchingWords(words);

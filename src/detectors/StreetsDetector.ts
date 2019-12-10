@@ -1,8 +1,10 @@
 import {Detector}  from './Detector';
+import { PhraseType } from '../../src/models/PhraseType';
+import { AnonymizerDto } from '../../src/models/AnonymizerDto';
 
 export class StreetsDetector implements Detector {
     
-    detectMatchingWords(words: string[]): string[] {
+    detectMatchingWords(words: string[]): AnonymizerDto[] {
         const streets = [];
 
         const triggers = ["ulica", "ul.", "ul", "ulicy"]
@@ -30,7 +32,7 @@ export class StreetsDetector implements Detector {
             }
         }
 
-        return streets;
+        return streets.map(word => Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.name}));
     }
 
     private isCaption(text: string): boolean {

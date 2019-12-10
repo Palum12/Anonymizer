@@ -1,10 +1,12 @@
 import {Detector} from "./Detector";
+import { AnonymizerDto } from "../../src/models/AnonymizerDto";
+import { PhraseType } from "../../src/models/PhraseType";
 
 export class PeselsDetector implements Detector {
 
     private TOLERATED_NUMBER_OF_ERRORS = 1;
 
-    detectMatchingWords(words: string[]): string[] {
+    detectMatchingWords(words: string[]): AnonymizerDto[] {
         const pesels = [];
 
         words.forEach(word => {
@@ -19,7 +21,7 @@ export class PeselsDetector implements Detector {
             }
         });
 
-        return pesels;
+        return pesels.map(word => Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.pesel}));
     }
     // pass empty array as faulty indexes 
     private validatePesel(word: string): [boolean, number[]] {

@@ -1,7 +1,8 @@
 import { Anonymizer } from "./Anonymizer";
+import { AnonymizerDto } from "../../src/models/AnonymizerDto";
 
 export class AsteriskAnonymizer extends Anonymizer {
-    protected parseText(text: string): string {
-        return '*'.repeat(text.length);
+    protected parseText(text: AnonymizerDto) {
+        text.anonymizedText = '*'.repeat(text.originalText.length);
     }
 }

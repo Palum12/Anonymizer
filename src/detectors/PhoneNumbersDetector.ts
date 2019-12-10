@@ -1,8 +1,10 @@
-import {Detector}  from './Detector';
+import { AnonymizerDto } from '../../src/models/AnonymizerDto';
+import { Detector }  from './Detector';
+import { PhraseType } from '../../src/models/PhraseType';
 
 export class PhoneNumbersDetector implements Detector {
     
-    detectMatchingWords(words: string[]): string[] {
+    detectMatchingWords(words: string[]): AnonymizerDto[] {
         const phoneNumbers = [];
         for(let i = 0; i < words.length; i++) {
             let currentWord = words[i];
@@ -16,7 +18,7 @@ export class PhoneNumbersDetector implements Detector {
                 phoneNumbers.push(result);
             }
         }
-        return phoneNumbers;
+        return phoneNumbers.map(word => Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.phoneNumber}));
     }
 
     private tryFindPhoneNumber(words: string[]): string {

@@ -1,3 +1,4 @@
+import { AnonymizerDto } from '../../src/models/AnonymizerDto';
 export interface Detector {
-    detectMatchingWords(words: string[]): string[];
+    detectMatchingWords(words: string[]): AnonymizerDto[];
 }
