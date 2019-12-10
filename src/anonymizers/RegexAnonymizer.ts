@@ -1,7 +1,6 @@
 import { ObscureRegexCreator } from './../regex-creators/ObscureRegexCreator';
 import { Anonymizer } from "./Anonymizer";
 import { AnonymizerDto } from "../../src/models/AnonymizerDto";
-/* global document*/
 
 export class RegexAnonymizer extends Anonymizer {
 

@@ -6,7 +6,6 @@ export class ObscureRegexCreator implements RegexCreator {
         return regexed.join('');
     }
     
-
     private split (text: string): string[] {
         if (text.length <= 2) {
           return [];
