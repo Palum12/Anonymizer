@@ -1,4 +1,4 @@
-import { AnonymizerDto } from '../../src/models/AnonymizerDto';
+import { AnonymizerDto } from './../models/AnonymizerDto';
 import { AsteriskAnonymizer } from './../anonymizers/AsteriskAnonymizer';
 import { RegexAnonymizer } from './../anonymizers/RegexAnonymizer';
 import { LocalityDetector } from './../detectors/LocalityDetector';
@@ -16,6 +16,10 @@ import {DetectorComposite} from "../detectors/DetectorComposite";
 import { DateDetector } from '../detectors/DateDetector';
 import { StreetsDetector } from '../detectors/StreetsDetector';
 import { Anonymizer } from '../../src/anonymizers/Anonymizer';
+import { PhraseType } from '../../src/models/PhraseType';
+
+const typeTranslations = require('../translations/translations.json');
+
 
 const anonymizersDictionary: {[id: string] : Anonymizer} = {};
 
@@ -25,7 +29,7 @@ Office.onReady(info => {
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("anonymize").onclick = anonymize;
     document.getElementById("generate").onclick = generateExampleText;
-    // document.getElementById("deanonymize").onclick = run;
+    document.getElementById("analyse").onclick = analyse;
 
     prepareSelect();
   }
@@ -78,6 +82,39 @@ export async function anonymize() {
   })
 }
 
+export async function analyse() {
+  return Word.run(async context => {
+    const detectors = getDetectors(true);
+    const detectorsContainer = new DetectorComposite(detectors);
+    const range = context.document.body.getRange();
+    context.load(range, 'text');
+    await context.sync();
+    const words = range.text.split(/((\.(?=\s|$)|\s)|(,))/g).filter(word => {
+      if (typeof word === 'string') {
+          const trimmed = word.trim()
+          return trimmed != '' && trimmed != '.' && trimmed != ',';
+      } else {
+          return false
+      }
+    });
+    const wordsToAnalyse = detectorsContainer.detectMatchingWords(words);
+
+    let result = '\nZnaleziono: ';
+    const findingTypes = Object.values(PhraseType).filter(x => typeof x === "string");
+
+    findingTypes.forEach( findingType  => {
+      const finds = wordsToAnalyse.filter(w => {
+        const currValue = PhraseType[w.phraseType];
+        return currValue == findingType;
+      });
+      result += `\n${typeTranslations[findingType]}: ${finds.length}`;
+    });
+
+    document.getElementById("analysisResults").innerText = result;
+    await context.sync();
+  })
+}
+
 export async function generateExampleText() {
   return Word.run(async context => {
     const generator = new ExampleDataGenerator();
@@ -113,37 +150,37 @@ function prepareSelect() {
 
 }
 
-function getDetectors(): Detector[] {
+function getDetectors(getAll?: boolean): Detector[] {
   const result = [];
 
-  if((<HTMLInputElement>document.getElementById("names")).checked) {
+  if((<HTMLInputElement>document.getElementById("names")).checked || getAll) {
     result.push(new NamesDetector());
   }
-  if((<HTMLInputElement>document.getElementById("phones")).checked) {
+  if((<HTMLInputElement>document.getElementById("phones")).checked || getAll) {
     result.push(new PhoneNumbersDetector());
   }
-  if((<HTMLInputElement>document.getElementById("pesels")).checked) {
+  if((<HTMLInputElement>document.getElementById("pesels")).checked || getAll) {
     result.push(new PeselsDetector());
   }
-  if((<HTMLInputElement>document.getElementById("emails")).checked) {
+  if((<HTMLInputElement>document.getElementById("emails")).checked || getAll) {
     result.push(new EmailsDetector());
   }
-  if((<HTMLInputElement>document.getElementById("dates")).checked) {
+  if((<HTMLInputElement>document.getElementById("dates")).checked || getAll) {
     result.push(new DateDetector());
   }
-  if((<HTMLInputElement>document.getElementById("license-plates")).checked) {
+  if((<HTMLInputElement>document.getElementById("license-plates")).checked || getAll) {
     result.push(new LicensePlatesDetector());
   }
-  if((<HTMLInputElement>document.getElementById("diseases")).checked) {
+  if((<HTMLInputElement>document.getElementById("diseases")).checked || getAll) {
     result.push(new DiseaseDetector());
   }
-  if((<HTMLInputElement>document.getElementById("postal-codes")).checked) {
+  if((<HTMLInputElement>document.getElementById("postal-codes")).checked || getAll) {
     result.push(new PostalCodeDetector());
   }
-  if((<HTMLInputElement>document.getElementById("localities")).checked) {
+  if((<HTMLInputElement>document.getElementById("localities")).checked || getAll) {
     result.push(new LocalityDetector());
   }
-  if ((<HTMLInputElement>document.getElementById("streets")).checked) {
+  if ((<HTMLInputElement>document.getElementById("streets")).checked || getAll) {
       result.push(new StreetsDetector());
   }
   return result;

@@ -7,9 +7,16 @@ let surnames = require('../storages/SurnamesBase.json');
 
 export class NamesDetector implements Detector {
     detectMatchingWords(words: string[]): AnonymizerDto[] {
-        return words.filter(word => 
-            binarySearch(word, names, (a, b) => b.localeCompare(a, 'pl', {'sensitivity': 'base'})) ||
-            binarySearch(word, surnames, (a, b) => b.localeCompare(a, 'pl', {'sensitivity': 'base'}))
-        ).map(word => Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.name}))
+        const result = [];
+
+        words.forEach(word => {
+            if (binarySearch(word, names, (a, b) => b.localeCompare(a, 'pl', {'sensitivity': 'base'}))) {
+                result.push(Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.name}));
+            } else if (binarySearch(word, surnames, (a, b) => b.localeCompare(a, 'pl', {'sensitivity': 'base'}))) {
+                result.push(Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.surname}));
+            }
+        })
+
+        return result;
     }
 }

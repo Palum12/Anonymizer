@@ -93,3 +93,10 @@ b {
 .anonymizers {
     padding: 10px 0;
 }
+
+.anonymizer-params {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}

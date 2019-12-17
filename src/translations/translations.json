@@ -1,0 +1,14 @@
+{
+    "other": "inne",
+    "name": "imiona",
+    "surname": "nazwiska",
+    "street": "ulice",
+    "date": "daty",
+    "disease": "choroby",
+    "email": "adresy e-mail",
+    "licensePlate": "numery tablic rejestracyjnych",
+    "locality": "miejscowości",
+    "pesel": "numery pesel",
+    "phoneNumber": "numery telefoniczne",
+    "postalCode": "kody pocztowe"
+}
