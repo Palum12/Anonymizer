@@ -1,5 +1,7 @@
 import { RegexCreator } from './RegexCreator';
 export class ObscureRegexCreator implements RegexCreator {
+    numOfOptions:number = 10
+    usedOptions:number = 0
     createRegex(sourceText: string): string {
         const splitted = this.split(sourceText);
         const regexed = this.createObscureRegex(splitted, sourceText);
@@ -31,10 +33,18 @@ export class ObscureRegexCreator implements RegexCreator {
 
     private createObscureRegex (couples: string[], originalWord: string): string[] {
         const result = [];
-        
-        for(let i = 0; i < couples.length; i++) {
-          const tempString = '(?=.*' + couples[i] + `.{${(couples.length - i)}})`
-          result.push(tempString);
+
+        for (let i = 0; i < couples.length; i++) {
+            if (this.usedOptions < this.numOfOptions) {
+                const shiftCalc = Math.ceil(this.numOfOptions / couples.length)
+                const tempString = '(?=.*' + couples[i] + '-' + this.stringShifter(couples[i], shiftCalc) + `.{${(couples.length - i)}})`
+                this.usedOptions += shiftCalc
+                result.push(tempString);
+                console.log("adding - in" + tempString + " by " + shiftCalc)
+            } else {
+                const tempString = '(?=.*' + couples[i] + `.{${(couples.length - i)}})`
+                result.push(tempString);
+            }
         }
         this.shuffleArray(result);
 
@@ -50,4 +60,30 @@ export class ObscureRegexCreator implements RegexCreator {
         
         return result;
     } 
+
+    private stringShifter(str: string, num: number) {
+        var alphabet = "abcdefghijklmnopqrstuvwxyz";
+        var newStr = "";
+    
+        for (var i = 0; i < str.length; i++) {
+            var char = str[i],
+                isUpper = char === char.toUpperCase() ? true : false;
+    
+            char = char.toLowerCase();
+    
+            if (alphabet.indexOf(char) > -1) {
+                var newIndex = alphabet.indexOf(char) + num;
+                if(newIndex < alphabet.length) {
+                  isUpper ? newStr += alphabet[newIndex].toUpperCase() : newStr += alphabet[newIndex];
+                } else {
+                  var shiftedIndex = -(alphabet.length - newIndex);
+                    isUpper ? newStr += alphabet[shiftedIndex].toUpperCase() : newStr += alphabet[shiftedIndex];
+                }
+            } else {
+               newStr += char;
+            }
+        }
+        return newStr;
+    
+    }
 }
