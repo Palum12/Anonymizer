@@ -1,6 +1,6 @@
 import { RegexCreator } from './RegexCreator';
 export class ObscureRegexCreator implements RegexCreator {
-    numOfOptions:number = 10
+    numOfOptions:number = 2
     usedOptions:number = 0
     createRegex(sourceText: string): string {
         const splitted = this.split(sourceText);
