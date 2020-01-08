@@ -32,7 +32,7 @@ export class StreetsDetector implements Detector {
             }
         }
 
-        return streets.map(word => Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.name}));
+        return streets.map(word => Object.assign(new AnonymizerDto(), {originalText: word, phraseType: PhraseType.street}));
     }
 
     private isCaption(text: string): boolean {

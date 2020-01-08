@@ -1,3 +1,6 @@
+import { NonAlphanumericDetector } from './../detectors/NonAlphanumericDetector';
+import { RegexDetector } from './../detectors/RegexDetector';
+import { PhraseType } from './../models/PhraseType';
 import { AnonymizerDto } from './../models/AnonymizerDto';
 import { AsteriskAnonymizer } from './../anonymizers/AsteriskAnonymizer';
 import { RegexAnonymizer } from './../anonymizers/RegexAnonymizer';
@@ -16,7 +19,6 @@ import {DetectorComposite} from "../detectors/DetectorComposite";
 import { DateDetector } from '../detectors/DateDetector';
 import { StreetsDetector } from '../detectors/StreetsDetector';
 import { Anonymizer } from '../../src/anonymizers/Anonymizer';
-import { PhraseType } from '../../src/models/PhraseType';
 
 const typeTranslations = require('../translations/translations.json');
 
@@ -103,11 +105,14 @@ export async function analyse() {
     const findingTypes = Object.values(PhraseType).filter(x => typeof x === "string");
 
     findingTypes.forEach( findingType  => {
-      const finds = wordsToAnalyse.filter(w => {
-        const currValue = PhraseType[w.phraseType];
-        return currValue == findingType;
-      });
-      result += `\n${typeTranslations[findingType]}: ${finds.length}`;
+      const findings = wordsToAnalyse.filter(w => PhraseType[w.phraseType] == findingType);
+      if (findingType === PhraseType[PhraseType.regex] && findings.length > 1) {
+        result = '\nDokument prawdopodbnie\nzostał zanonimizowany przy\nużyciu\nwyrażeń regularnych!\n' + result;
+      } else if (findingType === PhraseType[PhraseType.nonAlphanumeric] && findings.length > 1) {
+        result = '\nDokument prawdopodbnie\nzostał zanonimizowany\nprzy użyciu znaków\nniealfanumerycznych!\n' + result;
+      } else if (findingType !== PhraseType[PhraseType.nonAlphanumeric] && findingType !== PhraseType[PhraseType.regex]   ) {
+        result += `\n${typeTranslations[findingType]}: ${findings.length}`;
+      }
     });
 
     document.getElementById("analysisResults").innerText = result;
@@ -181,7 +186,10 @@ function getDetectors(getAll?: boolean): Detector[] {
     result.push(new LocalityDetector());
   }
   if ((<HTMLInputElement>document.getElementById("streets")).checked || getAll) {
-      result.push(new StreetsDetector());
+    result.push(new StreetsDetector());
+  }
+  if (getAll) {
+    result.push(new RegexDetector(), new NonAlphanumericDetector());
   }
   return result;
 }

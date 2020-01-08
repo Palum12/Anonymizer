@@ -10,5 +10,7 @@ export enum PhraseType {
     locality,
     pesel,
     phoneNumber,
-    postalCode
+    postalCode,
+    regex,
+    nonAlphanumeric
 }

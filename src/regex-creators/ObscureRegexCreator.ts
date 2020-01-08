@@ -1,8 +1,12 @@
+/* global document, Office, Word */
 import { RegexCreator } from './RegexCreator';
 export class ObscureRegexCreator implements RegexCreator {
     numOfOptions:number = 2
     usedOptions:number = 0
+    
+
     createRegex(sourceText: string): string {
+        this.numOfOptions = new Number((<HTMLInputElement>document.getElementById('regexNumberParam')).value) as number;
         const splitted = this.split(sourceText);
         const regexed = this.createObscureRegex(splitted, sourceText);
         return regexed.join('');
@@ -35,12 +39,11 @@ export class ObscureRegexCreator implements RegexCreator {
         const result = [];
 
         for (let i = 0; i < couples.length; i++) {
-            if (this.usedOptions < this.numOfOptions) {
+            if (this.usedOptions < this.numOfOptions && i > 0 && i < couples.length - 2) {
                 const shiftCalc = Math.ceil(this.numOfOptions / couples.length)
                 const tempString = '(?=.*' + couples[i] + '-' + this.stringShifter(couples[i], shiftCalc) + `.{${(couples.length - i)}})`
                 this.usedOptions += shiftCalc
                 result.push(tempString);
-                console.log("adding - in" + tempString + " by " + shiftCalc)
             } else {
                 const tempString = '(?=.*' + couples[i] + `.{${(couples.length - i)}})`
                 result.push(tempString);
@@ -71,7 +74,7 @@ export class ObscureRegexCreator implements RegexCreator {
     
             char = char.toLowerCase();
     
-            if (alphabet.indexOf(char) > -1) {
+            if (alphabet.indexOf(char) > -1 && i < 1) {
                 var newIndex = alphabet.indexOf(char) + num;
                 if(newIndex < alphabet.length) {
                   isUpper ? newStr += alphabet[newIndex].toUpperCase() : newStr += alphabet[newIndex];
