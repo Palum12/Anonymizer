@@ -9,6 +9,7 @@ export class RegexDetector implements Detector {
     }
 
     private checkIfRegex(word: string): boolean {
-        return /\/g/g.test(word);
+        return word.substr(word.length - 2) === '/g';
+        //return /\/g/g.test(word);
     }
 }
