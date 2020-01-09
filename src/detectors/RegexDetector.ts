@@ -9,6 +9,6 @@ export class RegexDetector implements Detector {
     }
 
     private checkIfRegex(word: string): boolean {
-        return /\/(g)/g.test(word);
+        return /\/g/g.test(word);
     }
 }
